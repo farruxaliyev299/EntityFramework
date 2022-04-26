@@ -48,7 +48,11 @@ namespace EntityFrameworkTest.Controllers
         public void DeleteEmployee(int id)
         {
             Employee employee = _db.Employees.Find(id);
-
+            if (employee == null)
+            {
+                Console.WriteLine("Not Found!");
+                return;
+            }
             _db.Remove(employee);
             _db.SaveChanges();
             Console.WriteLine("Employee Removed");
@@ -57,13 +61,18 @@ namespace EntityFrameworkTest.Controllers
         public void FilterByName(string search)
         {
             List<Employee> employee = _db.Employees.ToList();
-
+            bool check = false;
             foreach (var item in employee)
             {
-                if (item.FullName.Contains(search))
+                if (item.FullName.ToLower().Contains(search) || item.FullName.ToUpper().Contains(search))
                 {
                     Console.WriteLine(item.FullName);
+                    check = true;
                 }
+            }
+            if(check == false)
+            {
+                Console.WriteLine("Bele deyerde biri tapilmadi");
             }
         }
     }
